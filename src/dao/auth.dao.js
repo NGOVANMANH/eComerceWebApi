@@ -12,12 +12,16 @@ class AuthDao extends DAO {
             sql = `call sp_login_with_email(?, ?)`
             usernameParam = email
         }
+
+        console.log(sql)
+        console.log(usernameParam, password)
+
         this.connection.query(sql, [usernameParam, password], (err, data) => {
             if (err) {
                 console.log(err)
                 callback(err)
             } else {
-                callback(null, data)
+                callback(null, data[0])
             }
         })
 

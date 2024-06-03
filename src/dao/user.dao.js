@@ -4,7 +4,7 @@ class UserDao extends DAO {
     constructor() {
         super()
     }
-    getAllUsers({ limit = 5, offset = null }, callback) {
+    getAllUsers({ limit = null, offset = null }, callback) {
         const sql = `call sp_get_all_user(?, ?)`
         this.connection.query(sql, [limit, offset], (err, data) => {
             if (err) {
@@ -40,7 +40,28 @@ class UserDao extends DAO {
             if (err) {
                 callback(err)
             } else {
-                callback(null, data)
+                callback(null, data[0])
+            }
+        })
+    }
+
+    addUser(user, callback) {
+        const sql = `call sp_add_user(?,?,?,?,?,?,?,?,?)`
+        this.connection.query(sql, [
+            user.avatar,
+            user.firstName,
+            user.lastName,
+            user.username,
+            user.email,
+            user.password,
+            user.birthOfDate, // Ensure this is provided in 'YYYY-MM-DD' format
+            user.phoneNumber,
+            user.role,
+        ], (err, data) => {
+            if (err) {
+                callback(err)
+            } else {
+                callback(null, data[0])
             }
         })
     }

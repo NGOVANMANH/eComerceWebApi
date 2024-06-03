@@ -32,11 +32,13 @@ class BrandController {
         brandDao.getAllBrands({ limit, offset }, (err, data) => {
             if (err) {
                 res.status(200).json({
+                    success: false,
                     message: err.sqlMessage
                 })
             }
             else {
                 res.status(200).json({
+                    success: true,
                     data
                 })
             }

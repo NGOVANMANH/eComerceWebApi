@@ -1,25 +1,25 @@
-const brandDao = require('../dao/brand.dao')
+const categoryDao = require('../dao/category.dao')
 
-class BrandController {
-    addBrand(req, res, next) {
+class CategoryController {
+    addCategory(req, res, next) {
         const { parentId, name, shortDescription, description } = req.body
         if (!name) {
             return res.status(400).json({
-                succsess: false,
+                success: false,
                 message: 'Name is required'
             })
         }
 
-        brandDao.addBrand({ parentId, name, shortDescription, description }, (err, data) => {
+        categoryDao.addCategory({ parentId, name, shortDescription, description }, (err, data) => {
             if (err) {
                 res.status(200).json({
-                    succsess: false,
+                    success: false,
                     message: err.sqlMessage
                 })
             }
             else {
                 res.status(201).json({
-                    succsess: true,
+                    success: true,
                     message: 'Brand added successfully',
                     data
                 })
@@ -27,18 +27,18 @@ class BrandController {
         })
     }
 
-    getAllBrands(req, res, next) {
+    getAllCategories(req, res, next) {
         const { limit, offset } = req.query
-        brandDao.getAllBrands({ limit, offset }, (err, data) => {
+        categoryDao.getAllCategories({ limit, offset }, (err, data) => {
             if (err) {
                 res.status(200).json({
-                    succsess: false,
+                    success: false,
                     message: err.sqlMessage
                 })
             }
             else {
                 res.status(200).json({
-                    succsess: true,
+                    success: true,
                     data
                 })
             }
@@ -46,4 +46,4 @@ class BrandController {
     }
 }
 
-module.exports = new BrandController()
+module.exports = new CategoryController()

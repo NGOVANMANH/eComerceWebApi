@@ -4,9 +4,9 @@ class CategoryDao extends DAO {
     constructor() {
         super()
     }
-    addCategory({ name, shortDescription, description, logoUrl }, callback) {
+    addCategory({ parentId, name, shortDescription, description }, callback) {
         const sql = `call sp_add_category(?,?,?,?)`
-        this.connection.query(sql, [name, shortDescription, description, logoUrl], (err, data) => {
+        this.connection.query(sql, [parentId, name, shortDescription, description], (err, data) => {
             if (err) {
                 callback(err)
             } else {

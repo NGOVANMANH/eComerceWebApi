@@ -1,25 +1,22 @@
 const authDao = require('../dao/auth.dao')
-const toObject = require('../utils/toObject')
 
 class AuthController {
     login(req, res, next) {
         const { username, email, password } = req.body
 
+        console.log(req.body)
+
         authDao.login({ email, username, password }, (err, data) => {
-            const dataFormated = toObject(data)
-            const user = dataFormated[0][0]
-            if (Object.keys(user).includes('NULL')) {
+
+            if (!data[0]) {
                 return res.status(200).json({
                     success: false,
                     message: 'Invalid username or password'
                 })
             }
-            delete user.password
             return res.status(200).json({
                 success: true,
-                data: {
-                    ...user
-                }
+                data: data[0],
             })
         })
     }
@@ -36,9 +33,11 @@ class AuthController {
                     })
                 }
                 else {
+                    delete data.password;
                     res.status(200).json({
                         success: true,
-                        message: 'Register successfully'
+                        message: 'Register successfully',
+                        data
                     })
                 }
             })

@@ -4,9 +4,9 @@ class BrandDao extends DAO {
     constructor() {
         super()
     }
-    addBrand({ parentId = null, name, shortDescription, description }, callback) {
-        const sql = `call sp_add_category(?,?,?,?)`
-        this.connection.query(sql, [parentId, name, shortDescription, description], (err, data) => {
+    addBrand({ name, shortDescription, description, logoUrl }, callback) {
+        const sql = `call sp_add_brand(?,?,?,?)`
+        this.connection.query(sql, [name, shortDescription, description, logoUrl], (err, data) => {
             if (err) {
                 callback(err)
             } else {
@@ -16,7 +16,7 @@ class BrandDao extends DAO {
     }
 
     getAllBrands({ limit = null, offset = null }, callback) {
-        const sql = `call sp_get_all_category(?, ?)`
+        const sql = `call sp_get_all_brand(?, ?)`
         this.connection.query(sql, [limit, offset], (err, data) => {
             if (err) {
                 callback(err)
