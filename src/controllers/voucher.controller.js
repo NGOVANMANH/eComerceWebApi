@@ -154,6 +154,55 @@ class VoucherConttroller {
             }
         })
     }
+    userGetVoucher(req, res, next) {
+        const { userId, voucherId } = req.body
+        if (!userId || !voucherId) {
+            return res.status(400).json({
+                success: false,
+                message: 'userId and voucherId are required'
+            })
+        }
+        else {
+            voucherDao.userGetVoucher(userId, voucherId, (err, data) => {
+                if (err) {
+                    res.status(200).json({
+                        success: false,
+                        message: err.sqlMessage
+                    })
+                }
+                else {
+                    res.status(200).json({
+                        success: true,
+                        message: 'Get voucher successfully',
+                        data: data || null
+                    })
+                }
+            })
+        }
+    }
+    getVouchersByUserId(req, res, next) {
+        const { userId } = req.params
+        if (!userId) {
+            return res.status(400).json({
+                success: false,
+                message: 'userId is required'
+            })
+        }
+        voucherDao.getVouchersByUserId(userId, (err, data) => {
+            if (err) {
+                res.status(200).json({
+                    success: false,
+                    message: err.sqlMessage
+                })
+            }
+            else {
+                res.status(200).json({
+                    success: true,
+                    data: data || null
+                })
+            }
+        })
+    }
 }
 
 module.exports = new VoucherConttroller();

@@ -195,6 +195,24 @@ class ProductController {
             }
         })
     }
+    findProductByKey(req, res, next) {
+        const { key } = req.params
+        console.log(key);
+        productDao.findProductByKey(key, (err, data) => {
+            if (err) {
+                res.status(200).json({
+                    success: false,
+                    message: err.sqlMessage
+                })
+            }
+            else {
+                res.status(200).json({
+                    success: true,
+                    data: data
+                })
+            }
+        })
+    }
 }
 
 module.exports = new ProductController()

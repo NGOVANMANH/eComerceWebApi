@@ -9,6 +9,7 @@ router.get('/product-skus/:productId', productController.getProductSkusByProduct
 router.patch('/:id', productController.updateProductById)
 router.get('/', productController.getProducts)
 router.post('/add-detail', productController.addProductDetail)
+router.get('/search/:key', productController.findProductByKey)
 router.post('/', productController.addProduct)
 
 module.exports = router

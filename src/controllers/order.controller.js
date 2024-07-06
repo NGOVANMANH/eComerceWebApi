@@ -1,4 +1,5 @@
 const orderDao = require("../dao/order.dao");
+const userDao = require("../dao/user.dao");
 
 class OrderConttroller {
     addNewOrder(req, res, next) {
@@ -9,21 +10,38 @@ class OrderConttroller {
                 message: 'userId, items, voucherCode, addressId are required'
             })
         }
-        orderDao.addNewOrder({ userId, items, voucherCode, addressId }, (err, data) => {
+
+
+        userDao.getUserById(userId, (err, user) => {
+
             if (err) {
-                res.status(200).json({
+                return res.status(200).json({
                     success: false,
                     message: err.sqlMessage
                 })
             }
             else {
-                res.status(200).json({
-                    success: true,
-                    message: 'Add new order successfully',
-                    data
+
+                console.log('check user: ', user[0]?.email);
+
+                orderDao.addNewOrder({ userId, items, voucherCode, addressId }, (err, data) => {
+                    if (err) {
+                        res.status(200).json({
+                            success: false,
+                            message: err.sqlMessage
+                        })
+                    }
+                    else {
+                        res.status(200).json({
+                            success: true,
+                            message: 'Add new order successfully',
+                            data
+                        })
+                    }
                 })
             }
         })
+
     }
     getOrderById(req, res, next) {
         const { id } = req.query

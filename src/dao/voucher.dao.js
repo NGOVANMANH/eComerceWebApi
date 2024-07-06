@@ -82,6 +82,26 @@ class VoucherDao extends DAO {
             }
         })
     }
+    userGetVoucher(userId, voucherId, callback) {
+        const sql = `call sp_add_user_voucher(?,?)`
+        this.connection.query(sql, [userId, voucherId], (err, data) => {
+            if (err) {
+                callback(err)
+            } else {
+                callback(null, data[0])
+            }
+        })
+    }
+    getVouchersByUserId(userId, callback) {
+        const sql = `select v.*, uv.is_usable from users_vouchers uv, vouchers v where uv.user_id=${userId} and uv.voucher_id = v.id`
+        this.connection.query(sql, (err, data) => {
+            if (err) {
+                callback(err)
+            } else {
+                callback(null, data)
+            }
+        })
+    }
 }
 
 module.exports = new VoucherDao()

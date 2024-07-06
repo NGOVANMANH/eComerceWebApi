@@ -138,6 +138,52 @@ class ProductDao extends DAO {
             }
         })
     }
+    findProductByKey(key, callback) {
+        const sql = `
+            SELECT
+                ps.id,
+                p.id AS product_id,
+                p.name,
+                p.description,
+                p.short_description,
+                p.thumbnail,
+                b.name AS brand_name,
+                b.id AS brand_id,
+                c.name AS category_name,
+                c.id AS category_id,
+                pa1.value AS size,
+                pa2.value AS color,
+                ps.sku AS sku,
+                ps.price AS price,
+                ps.discount_percent,
+                ps.quantity AS quantity
+            FROM
+                products p
+            LEFT JOIN
+                products_skus ps ON p.id = ps.product_id
+            LEFT JOIN
+                product_attributes pa1 ON ps.size_attribute_id = pa1.id AND pa1.type = 'size'
+            LEFT JOIN
+                product_attributes pa2 ON ps.color_attribute_id = pa2.id AND pa2.type = 'color'
+            LEFT JOIN
+                brands b ON p.brand_id = b.id
+            LEFT JOIN
+                categories c ON p.category_id = c.id
+            WHERE
+                p.name LIKE CONCAT('%', ?, '%') OR
+                p.description LIKE CONCAT('%', ?, '%') OR
+                p.short_description LIKE CONCAT('%', ?, '%')
+            ORDER BY
+                p.created_at DESC;
+        `
+        this.connection.query(sql, [key, key, key], (err, data) => {
+            if (err) {
+                callback(err)
+            } else {
+                callback(null, data)
+            }
+        })
+    }
 }
 
 module.exports = new ProductDao()

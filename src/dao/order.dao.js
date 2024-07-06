@@ -2,7 +2,6 @@ const DAO = require('./dao')
 
 class OrderDao extends DAO {
     addNewOrder({ userId, items, voucherCode, addressId }, callback) {
-        console.log({ userId, items, voucherCode, addressId })
         const sql = `CALL sp_make_order(?, ?, ?, ?)`;
         this.connection.query(sql, [userId, JSON.stringify(items), voucherCode, addressId], (err, data) => {
             if (err) {
